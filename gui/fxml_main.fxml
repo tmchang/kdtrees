@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+
+<GridPane xmlns:fx="http://javafx.com/fxml" fx:controller="kdtrees.gui.MainPageController" hgap="5" vgap="5">
+    <columnConstraints>
+        <ColumnConstraints hgrow="ALWAYS" minWidth="125" maxWidth="150"/>
+        <ColumnConstraints hgrow="ALWAYS" minWidth="125" maxWidth="150"/>
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints minHeight="30" maxHeight="40.0" vgrow="SOMETIMES" />
+        <RowConstraints minHeight="30" maxHeight="40.0" vgrow="SOMETIMES" />
+    </rowConstraints>
+    
+    <HBox spacing="10" alignment="center" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.columnSpan="2">
+        <Text fx:id="welcomeText" text="Welcome!">
+            <font>
+                <Font name="Arial Bold" size="14" />
+            </font>
+        </Text>
+    </HBox>
+    
+    <HBox spacing="10" alignment="center" GridPane.columnIndex="0" GridPane.rowIndex="1" GridPane.columnSpan="2">
+        <Button id="change-color" text="Change color" onAction="#changeColor" />
+    </HBox>
+</GridPane>
