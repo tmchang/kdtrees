@@ -2,6 +2,8 @@ package kdtrees.kdtree
 import scala.math
 class Node(vec: Array[Double]) extends KDData[Array[Double]] {
     
+    val left: Node = null
+    val right: Node = null
     val dimensions = vec.length
     
     override def distance(other: Array[Double]): Double = {
