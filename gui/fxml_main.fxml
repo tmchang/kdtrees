@@ -6,7 +6,8 @@
 <?import javafx.scene.text.*?>
 <?import javafx.scene.image.*?>
 
-<GridPane xmlns:fx="http://javafx.com/fxml" fx:controller="kdtrees.gui.MainPageController" hgap="5" vgap="5">
+<GridPane xmlns:fx="http://javafx.com/fxml" fx:controller="kdtrees.gui.MainPageController" hgap="5" vgap="10">
+	<padding><Insets top="25" right="25" bottom="10" left="25"/></padding>
     <columnConstraints>
         <ColumnConstraints hgrow="ALWAYS" minWidth="125" maxWidth="150"/>
         <ColumnConstraints hgrow="ALWAYS" minWidth="125" maxWidth="150"/>
@@ -16,15 +17,110 @@
         <RowConstraints minHeight="30" maxHeight="40.0" vgrow="SOMETIMES" />
     </rowConstraints>
     
-    <HBox spacing="10" alignment="center" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.columnSpan="2">
-        <Text fx:id="welcomeText" text="Welcome!">
+    <HBox spacing="10" alignment="center" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.columnSpan="3">
+        <Text fx:id="welcomeText" text="Welcome to Knight Date!">
             <font>
-                <Font name="Arial Bold" size="14" />
+                <Font name="Arial Bold" size="18" />
             </font>
         </Text>
     </HBox>
     
-    <HBox spacing="10" alignment="center" GridPane.columnIndex="0" GridPane.rowIndex="1" GridPane.columnSpan="2">
-        <Button id="change-color" text="Change color" onAction="#changeColor" />
+    <HBox spacing="10" alignment="center" GridPane.columnIndex="0" GridPane.rowIndex="1" GridPane.columnSpan="3">
+        <Text text="Enter your profile below to find a match.">
+            <font>
+                <Font name="Arial" size="14" />
+            </font>
+        </Text>
     </HBox>
+    
+    <HBox spacing="10" alignment="center" GridPane.columnIndex="0" GridPane.rowIndex="2" GridPane.columnSpan="3">
+        <Text text= "Click 'Randomize!' to use a random profile.">
+            <font>
+                <Font name="Arial" size="14" />
+            </font>
+        </Text>
+    </HBox>
+   
+    
+    <Label text="Name:"
+	GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+    
+    <TextField fx:id="nameText"
+	GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+	
+	<Label text="Attribute 1:"
+	GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+    
+    <TextField fx:id="attr1Text"
+	GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+
+    <Label text="Attribute 2:"
+	GridPane.columnIndex="0" GridPane.rowIndex="5"/>
+    
+    <TextField fx:id="attr2Text"
+	GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+	
+	<Label text="Attribute 3:"
+	GridPane.columnIndex="0" GridPane.rowIndex="6"/>
+    
+    <TextField fx:id="attr3Text"
+	GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+
+	<Label text="Attribute 4:"
+	GridPane.columnIndex="0" GridPane.rowIndex="7"/>
+    
+    <TextField fx:id="attr4Text"
+	GridPane.columnIndex="1" GridPane.rowIndex="7"/>
+
+    <Label text="Attribute 5:"
+	GridPane.columnIndex="0" GridPane.rowIndex="8"/>
+    
+    <TextField fx:id="attr5Text"
+	GridPane.columnIndex="1" GridPane.rowIndex="8"/>
+	
+	<Label text="Attribute 6:"
+	GridPane.columnIndex="0" GridPane.rowIndex="9"/>
+    
+    <TextField fx:id="attr6Text"
+	GridPane.columnIndex="1" GridPane.rowIndex="9"/>
+
+	<Label text="Attribute 7:"
+	GridPane.columnIndex="0" GridPane.rowIndex="10"/>
+    
+    <TextField fx:id="attr7Text"
+	GridPane.columnIndex="1" GridPane.rowIndex="10"/>
+
+    <Label text="Attribute 8:"
+	GridPane.columnIndex="0" GridPane.rowIndex="11"/>
+    
+    <TextField fx:id="attr8Text"
+	GridPane.columnIndex="1" GridPane.rowIndex="11"/>
+	
+	<Label text="Attribute 9:"
+	GridPane.columnIndex="0" GridPane.rowIndex="12"/>
+    
+    <TextField fx:id="attr9Text"
+	GridPane.columnIndex="1" GridPane.rowIndex="12"/>
+
+	<Label text="Attribute 10:"
+	GridPane.columnIndex="0" GridPane.rowIndex="13"/>
+    
+    <TextField fx:id="attr10Text"
+	GridPane.columnIndex="1" GridPane.rowIndex="13"/>
+	
+    
+    <HBox spacing="10" alignment="center"
+		GridPane.columnIndex="1" GridPane.rowIndex="15">
+	<Button fx:id="clear" text="Clear all" onAction="#handleClearButtonAction"/>
+		</HBox>
+	
+	<HBox spacing="10" alignment="center"
+		GridPane.columnIndex="1" GridPane.rowIndex="16">
+	<Button fx:id="run" text="Find match!" onAction="#handleSubmitButtonAction"/>
+		</HBox>
+
+	<HBox spacing="10" alignment="center"
+		GridPane.columnIndex="0" GridPane.rowIndex="15">
+	<Button fx:id="randomize" text="Randomize!" onAction="#handleRandomizeButtonAction"/>
+		</HBox>    
 </GridPane>

@@ -7,19 +7,19 @@ import javafx.scene.Scene
 import javafx.stage.Stage
 
 class AppTemplate extends Application {
-  val AppHeight = 100
-  val AppWidth = 300
+  val AppHeight = 780
+  val AppWidth = 330
   
   override def start(stage: Stage) {
     val args: Array[String] = getParameters().getRaw().toArray(new Array[String](0))
-    
+    val csvFile = args(0) //Load the .csv file containing profiles
     // Load the FXML
     val loader: FXMLLoader = new FXMLLoader(getClass().getResource("fxml_main.fxml"))
     val root: Parent = loader.load()
     val controller: MainPageController = loader.getController()
     controller.setStage(stage)
 
-    stage.setTitle("Application Title")
+    stage.setTitle("Knight Date")
     stage.setScene(new Scene(root, AppWidth, AppHeight))
     stage.setMinWidth(AppWidth);
     stage.setMinHeight(AppHeight);
