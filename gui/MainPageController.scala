@@ -11,6 +11,10 @@ import javafx.scene.Scene
 import javafx.fxml.FXMLLoader
 import javafx.scene.Parent
 import scala.util.Random
+import kdtrees.kdtree.Profile
+import kdtrees.kdtree.KDTree
+import kdtrees.kdtree.KDTreeNode
+import scala.Double
 
 class MainPageController {
 //  @FXML private var welcomeText: Text = _
@@ -30,12 +34,6 @@ class MainPageController {
   private var page2 : Scene = null;
   private var page2Controller : ResultPageController = null;
 
-//  @FXML def changeColor = {
-//    val r = (System.currentTimeMillis() % 71 / 71.0)
-//    val g = (System.currentTimeMillis() % 97 / 97.0)
-//    val b = (System.currentTimeMillis() % 83 / 83.0)
-//    welcomeText.setFill(Color.color(r, g, b))
-//  }
   
  /**
  * Handles the pressing of the clear button on the main GUI page.
@@ -77,7 +75,11 @@ class MainPageController {
  **/
   @FXML protected def handleRandomizeButtonAction(event : ActionEvent) : Unit = {
    val randomGen = new Random()
-   nameText.setText(randomGen.nextString(8))
+   val strBuild = new StringBuilder()
+   for (i <- 1 to 8) {
+     strBuild.append(randomGen.nextPrintableChar())
+   }
+   nameText.setText(strBuild.toString())
    attr1Text.setText(randomGen.nextDouble.toString)
    attr2Text.setText(randomGen.nextDouble.toString)
    attr3Text.setText(randomGen.nextDouble.toString)
@@ -97,5 +99,20 @@ class MainPageController {
    */
   def setStage(stage: Stage) {
     this.stage = stage
+  }
+  
+  def findMatch() {
+   val myProfile = new Profile(Array(attr1Text.toString.toDouble,
+                                      attr2Text.toString.toDouble,
+                                      attr3Text.toString.toDouble,
+                                      attr4Text.toString.toDouble,
+                                      attr5Text.toString.toDouble,
+                                      attr6Text.toString.toDouble,
+                                      attr7Text.toString.toDouble,
+                                      attr8Text.toString.toDouble,
+                                      attr9Text.toString.toDouble,
+                                      attr10Text.toString.toDouble), 
+                                      nameText.toString)
+
   }
 }
