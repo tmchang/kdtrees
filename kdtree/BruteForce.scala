@@ -10,3 +10,10 @@ class BruteForce[A <: KDData[A]](data: List[A]) extends KDSearch[A] {
       None
   }
 }
+
+object BruteForce {
+  
+  def main(args: Array[String]) {
+    println("here")
+  }
+}
