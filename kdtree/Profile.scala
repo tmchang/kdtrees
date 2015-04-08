@@ -27,7 +27,7 @@ class Profile(val attributes: Array[Double], val name: String) extends KDData[Pr
     
     val sb = new StringBuilder()
     for (d <- attributes) {
-      sb.append(d + " ")
+      sb.append(d + "\n")
     }
     
     return "Attributes: " + sb.toString +
