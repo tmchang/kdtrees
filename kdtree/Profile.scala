@@ -30,7 +30,7 @@ class Profile(val attributes: Array[Double], val name: String) extends KDData[Pr
       sb.append(d + "\n")
     }
     
-    return "Attributes: " + sb.toString +
+    return "Attributes: \n" + sb.toString +
               "Name: " + name
   }
   
