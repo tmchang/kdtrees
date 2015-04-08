@@ -16,7 +16,8 @@ class AppTemplate extends Application {
   override def start(stage: Stage) {
     val args: Array[String] = getParameters().getRaw().toArray(new Array[String](0))
     val csvFile = args(0) //Load the .csv file containing profiles
-    val tree: KDTree[Profile] = null
+    val profiles = Parser.csvToProfiles(csvFile)
+    val tree: KDTree[Profile] = new KDTree(profiles)
     // Load the FXML
     val loader: FXMLLoader = new FXMLLoader(getClass().getResource("fxml_main.fxml"))
     val root: Parent = loader.load()

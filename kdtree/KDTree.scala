@@ -10,7 +10,6 @@ class KDTree[A <: KDData[A]](data: List[A]) extends KDSearch[A] {
   buildTree(0, root, data)  
  
   def buildTree(dim: Int, parent: KDTreeNode[A], dataRemaining: List[A]) {
-    println("i")
     var leftData = new ListBuffer[A]()
     var rightData = new ListBuffer[A]()
     if (dataRemaining.length > 1) {
@@ -23,12 +22,22 @@ class KDTree[A <: KDData[A]](data: List[A]) extends KDSearch[A] {
      val leftList = leftData.toList
      val rightList = rightData.toList
      val nextDim = (dim + 1) % parent.datum.dimensions
-     val leftChild = findMedian(nextDim, leftList)
-     val rightChild = findMedian(nextDim, rightList)
-     parent.left = Some(new KDTreeNode(leftChild))
-     parent.right = Some(new KDTreeNode(rightChild))
-     buildTree(nextDim, parent.left.get, leftList)
-     buildTree(nextDim, parent.right.get, rightList)
+     leftList.length match{
+       case 0 => 
+       case n => {
+         val leftChild = findMedian(nextDim, leftList)
+         parent.left = Some(new KDTreeNode(leftChild))
+         buildTree(nextDim, parent.left.get, leftList)
+       }
+     }
+     rightList.length match{
+       case 0 => 
+       case n => {
+         val rightChild = findMedian(nextDim, rightList)
+         parent.right = Some(new KDTreeNode(rightChild))
+         buildTree(nextDim, parent.right.get, rightList)
+       }
+     }
     }
   }  
     
@@ -164,7 +173,6 @@ class KDTree[A <: KDData[A]](data: List[A]) extends KDSearch[A] {
   
   private def findMedian(dim: Int, dataList: List[A]) : A = {
     val comparisonFunction = lessThan(dim)_
-    println(dataList)
     val sortedData = dataList.sortWith(comparisonFunction)
     return sortedData(math.floor(sortedData.length/2).toInt)
   }
@@ -233,11 +241,16 @@ object KDTree {
     
     //Test loading csv and findNN 
     import kdtrees.gui.Parser
+    import scala.util.Random
     val csvProfiles = Parser.csvToProfiles("src/kdtrees/profiles.csv")
-    println(csvProfiles(1))
-    println(csvProfiles.length)
-    
     val bigTree = new KDTree(csvProfiles)
+    val brute = new BruteForce(csvProfiles)
+    val f1 = new Profile(Array(0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0), "")
+    println(brute.findNN(f1).get)
+    println(bigTree.findNN(f1).get)
+    val f2 = new Profile(Array.fill(10)(Random.nextDouble), "")
+    println(brute.findNN(f2).get == bigTree.findNN(f2).get)
+    
     
   }
 }

@@ -33,6 +33,11 @@ class Profile(val attributes: Array[Double], val name: String) extends KDData[Pr
     return "Attributes: " + sb.toString +
               "Name: " + name
   }
+  
+  def equals(that: Profile): Boolean ={
+    return (this.attributes.deep == that.attributes.deep) &&
+              (this.name == that.name)
+  }
 }
 
 object Profile {
