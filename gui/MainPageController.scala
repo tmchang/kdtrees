@@ -33,6 +33,11 @@ class MainPageController {
   private var stage: Stage = _
   private var page2 : Scene = null;
   private var page2Controller : ResultPageController = null;
+  private var tree : KDTree[Profile] = null
+  
+  def setTree(t: KDTree[Profile]) {
+    this.tree = t
+  }
 
   
  /**
