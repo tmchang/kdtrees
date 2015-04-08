@@ -10,6 +10,7 @@ class KDTree[A <: KDData[A]](data: List[A]) extends KDSearch[A] {
   buildTree(0, root, data)  
  
   def buildTree(dim: Int, parent: KDTreeNode[A], dataRemaining: List[A]) {
+    println("i")
     var leftData = new ListBuffer[A]()
     var rightData = new ListBuffer[A]()
     if (dataRemaining.length > 1) {
@@ -163,6 +164,7 @@ class KDTree[A <: KDData[A]](data: List[A]) extends KDSearch[A] {
   
   private def findMedian(dim: Int, dataList: List[A]) : A = {
     val comparisonFunction = lessThan(dim)_
+    println(dataList)
     val sortedData = dataList.sortWith(comparisonFunction)
     return sortedData(math.floor(sortedData.length/2).toInt)
   }
@@ -228,6 +230,14 @@ object KDTree {
     println("Nodes from left to right")
     println(test2.toString())
     println(test2.findNN(new Profile(Array(3.0, 9.0, 8.0),"test2")))
+    
+    //Test loading csv and findNN 
+    import kdtrees.gui.Parser
+    val csvProfiles = Parser.csvToProfiles("src/kdtrees/profiles.csv")
+    println(csvProfiles(1))
+    println(csvProfiles.length)
+    
+    val bigTree = new KDTree(csvProfiles)
     
   }
 }

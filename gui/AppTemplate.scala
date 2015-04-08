@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader
 import javafx.scene.Parent
 import javafx.scene.Scene
 import javafx.stage.Stage
+import scala.io.Source
 
 class AppTemplate extends Application {
   val AppHeight = 780
@@ -35,6 +36,17 @@ class AppTemplate extends Application {
 object AppTemplate {
   def main(args: Array[String]) {
     Application.launch(classOf[AppTemplate], args: _*)
+  }
+}
+
+object Parser {
+  import kdtrees.kdtree.Profile
+  def csvToProfiles(file: String): List[Profile] = {
+    val src = Source.fromFile(file)
+    val iter = src.getLines().map(_.split(","))
+    val profiles = for (p <- iter) 
+      yield new Profile(p.slice(1,p.length).map(_.toDouble), p(0))
+    profiles.toList
   }
 }
 
