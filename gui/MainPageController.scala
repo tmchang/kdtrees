@@ -62,6 +62,9 @@ class MainPageController {
  * Handles the pressing of the submit button on the main GUI page.
  **/
   @FXML protected def handleSubmitButtonAction(event : ActionEvent) : Unit = {
+    
+    val yourMatch = findMatch()
+    
        if (page2 == null) {
        val loader : FXMLLoader = new FXMLLoader(getClass().getResource("fxml_result.fxml"))
        var root: Parent = loader.load()
@@ -69,7 +72,7 @@ class MainPageController {
        this.page2Controller = tempc
        this.page2 = new Scene(root, 780, 330)
      }
-     page2Controller.display("test text", stage.getScene(), stage)
+     page2Controller.display(yourMatch, stage.getScene(), stage)
      stage.close()
      stage.setScene(page2)
      stage.show()
@@ -106,18 +109,19 @@ class MainPageController {
     this.stage = stage
   }
   
-  def findMatch() {
-   val myProfile = new Profile(Array(attr1Text.toString.toDouble,
-                                      attr2Text.toString.toDouble,
-                                      attr3Text.toString.toDouble,
-                                      attr4Text.toString.toDouble,
-                                      attr5Text.toString.toDouble,
-                                      attr6Text.toString.toDouble,
-                                      attr7Text.toString.toDouble,
-                                      attr8Text.toString.toDouble,
-                                      attr9Text.toString.toDouble,
-                                      attr10Text.toString.toDouble), 
-                                      nameText.toString)
+  def findMatch() : String = {
+   val myProfile = new Profile(Array(attr1Text.getText.toDouble,
+                                      attr2Text.getText.toDouble,
+                                      attr3Text.getText.toDouble,
+                                      attr4Text.getText.toDouble,
+                                      attr5Text.getText.toDouble,
+                                      attr6Text.getText.toDouble,
+                                      attr7Text.getText.toDouble,
+                                      attr8Text.getText.toDouble,
+                                      attr9Text.getText.toDouble,
+                                      attr10Text.getText.toDouble), 
+                                      nameText.getText)
 
+  this.tree.findNN(myProfile).toString
   }
 }

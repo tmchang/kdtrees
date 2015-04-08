@@ -8,10 +8,10 @@
 
     
 <GridPane fx:controller="kdtrees.gui.ResultPageController"
-    xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="10" vgap="5">
+    xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="5" vgap="10">
 	<padding><Insets top="25" right="25" bottom="10" left="25"/></padding>
   	<columnConstraints>
-    	<ColumnConstraints hgrow="ALWAYS" minWidth="250.0" prefWidth="250.0" maxWidth="5000.0"/>
+    	<ColumnConstraints hgrow="ALWAYS" minWidth="125.0" prefWidth="125.0" maxWidth="800.0"/>
   	</columnConstraints>
   	<rowConstraints>
     	<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -19,7 +19,7 @@
     	<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
   	</rowConstraints>
  
-    <Label text="Result:"
+    <Label text="Your Match:"
         GridPane.columnIndex="0" GridPane.rowIndex="0"/>
 
 	<Text fx:id="resultText" text="Result"

@@ -10,7 +10,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 class ResultPageController {
-//  @FXML private var resultText : Text = null
+  @FXML private var resultText : Text = null
   private var stage : Stage = null
   private var page1 : Scene = null
 
@@ -33,7 +33,7 @@ class ResultPageController {
  *
  **/
 def display(text : String, page1 : Scene, s : Stage) : Unit = {
-//  resultText.setText(text)
+  resultText.setText(text)
   this.page1 = page1
   this.stage = s
   
