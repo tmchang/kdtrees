@@ -62,7 +62,7 @@ class MainPageController {
  * Handles the pressing of the submit button on the main GUI page.
  **/
   @FXML protected def handleSubmitButtonAction(event : ActionEvent) : Unit = {
-    
+    //try here
     val yourMatch = findMatch()
     
        if (page2 == null) {
@@ -76,6 +76,8 @@ class MainPageController {
      stage.close()
      stage.setScene(page2)
      stage.show()
+     
+     //catch and pop up some red text
   }
   
    /**
@@ -88,16 +90,16 @@ class MainPageController {
      strBuild.append(randomGen.nextPrintableChar())
    }
    nameText.setText(strBuild.toString())
-   attr1Text.setText(randomGen.nextDouble.toString)
-   attr2Text.setText(randomGen.nextDouble.toString)
-   attr3Text.setText(randomGen.nextDouble.toString)
-   attr4Text.setText(randomGen.nextDouble.toString)
-   attr5Text.setText(randomGen.nextDouble.toString)
-   attr6Text.setText(randomGen.nextDouble.toString)
-   attr7Text.setText(randomGen.nextDouble.toString)
-   attr8Text.setText(randomGen.nextDouble.toString)
-   attr9Text.setText(randomGen.nextDouble.toString)
-   attr10Text.setText(randomGen.nextDouble.toString)
+   attr1Text.setText((((randomGen.nextDouble)*2)-1).toString)
+   attr2Text.setText((((randomGen.nextDouble)*2)-1).toString)
+   attr3Text.setText((((randomGen.nextDouble)*2)-1).toString)
+   attr4Text.setText((((randomGen.nextDouble)*2)-1).toString)
+   attr5Text.setText((((randomGen.nextDouble)*2)-1).toString)
+   attr6Text.setText((((randomGen.nextDouble)*2)-1).toString)
+   attr7Text.setText((((randomGen.nextDouble)*2)-1).toString)
+   attr8Text.setText((((randomGen.nextDouble)*2)-1).toString)
+   attr9Text.setText((((randomGen.nextDouble)*2)-1).toString)
+   attr10Text.setText((((randomGen.nextDouble)*2)-1).toString)
   }
  
   /**
@@ -110,18 +112,30 @@ class MainPageController {
   }
   
   def findMatch() : String = {
-   val myProfile = new Profile(Array(attr1Text.getText.toDouble,
-                                      attr2Text.getText.toDouble,
-                                      attr3Text.getText.toDouble,
-                                      attr4Text.getText.toDouble,
-                                      attr5Text.getText.toDouble,
-                                      attr6Text.getText.toDouble,
-                                      attr7Text.getText.toDouble,
-                                      attr8Text.getText.toDouble,
-                                      attr9Text.getText.toDouble,
-                                      attr10Text.getText.toDouble), 
-                                      nameText.getText)
+   try { val myProfile = new Profile(Array(stringToDouble(attr1Text.getText),
+                                      stringToDouble(attr2Text.getText),
+                                      stringToDouble(attr3Text.getText),
+                                      stringToDouble(attr4Text.getText),
+                                      stringToDouble(attr5Text.getText),
+                                      stringToDouble(attr6Text.getText),
+                                      stringToDouble(attr7Text.getText),
+                                      stringToDouble(attr8Text.getText),
+                                      stringToDouble(attr9Text.getText),
+                                      stringToDouble(attr10Text.getText)), 
+                                      nameText.getText) 
+     this.tree.findNN(myProfile).get.toString
+   }
+   catch { 
+     case e : NumberFormatException => "Attributes should be doubles between -1 and 1"
+     
+   }
 
-  this.tree.findNN(myProfile).toString
+
+  }
+  
+  private def stringToDouble(s: String): Double = {
+    val d = s.toDouble
+    if (d > 1.0 || d < -1.0) throw new NumberFormatException()
+    else d
   }
 }
