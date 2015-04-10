@@ -33,7 +33,7 @@ class KDTree[A <: KDData[A]](data: List[A]) extends KDSearch[A] {
     if (dataRemaining.length > 1) {
       for (i <- dataRemaining) {
         if (i ne parent.datum) {
-          if (i.lessThan(parent.datum)(dim)) leftData.append(i)
+          if (lessThan(dim)(i, parent.datum)) leftData.append(i)
           else rightData.append(i)
         }
       }
@@ -86,7 +86,7 @@ class KDTree[A <: KDData[A]](data: List[A]) extends KDSearch[A] {
       dim: Int) {
     
     visitedNodes.push(parent) // parent is visited
-    if (target.lessThan(parent.datum)(dim)) {
+    if (lessThan(dim)(target, parent.datum)) {// Search right
         parent.left match {
           case None => // Leaf Node
           case Some(newNode) => searchTree(
@@ -127,6 +127,7 @@ class KDTree[A <: KDData[A]](data: List[A]) extends KDSearch[A] {
       bestDist: Double,
       bestMatch: A,
       baseLevel: Int): Option[A] = {
+    
     val toCheck = visitedNodes.pop // The node we are checking for distance
     val dim = toCheck.datum.dimensions
     var newBestDist: Option[Double] =  None
@@ -138,11 +139,12 @@ class KDTree[A <: KDData[A]](data: List[A]) extends KDSearch[A] {
       newBestDist = Some(bestDist)
       newBestMatch = Some(bestMatch)
     }
+    
     if (visitedNodes.length == 0) return newBestMatch //End recursion
-    if (visitedNodes
+    if (math.abs(visitedNodes
         .top
         .datum
-        .compDim((visitedNodes.length - 1 + baseLevel) % dim, target) < 
+        .compDim((visitedNodes.length - 1 + baseLevel) % dim, target)) < 
         newBestDist.get) {// There could be nearer points in other branch
       val otherNodes: Stack[KDTreeNode[A]] = new Stack[KDTreeNode[A]]()
       if (visitedNodes.top.left.get eq toCheck) {//Already checked the left
@@ -227,7 +229,8 @@ class KDTree[A <: KDData[A]](data: List[A]) extends KDSearch[A] {
    * @param data2 - the second data
    * @return - true if data1 < data2 in the dimension dim
    */
-  private def lessThan(dim: Int)(data1: A, data2: A): Boolean = data1.lessThan(data2)(dim)
+  private def lessThan(dim: Int)(data1: A, data2: A): Boolean = 
+    (data1.compDim(dim, data2) < 0)
   
   /**
    * Returns an array created from the KDTree, recursively putting all nodes
@@ -240,7 +243,9 @@ class KDTree[A <: KDData[A]](data: List[A]) extends KDSearch[A] {
     /**
      * toArray is the wrapper for this function
      */
-    def helper(level: Int, node: Option[KDTreeNode[A]]): Array[Option[KDTreeNode[A]]] = {
+    def helper(
+        level: Int, 
+        node: Option[KDTreeNode[A]]): Array[Option[KDTreeNode[A]]] = {
       if (level >=2) Array(node)
       else node match {
         case None => Array(None)

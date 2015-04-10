@@ -32,6 +32,5 @@ trait KDData[A] {
    */
   def compDim(dim: Int, other: A): Double
   
-  def lessThan(other: A)(dim: Int): Boolean
   
 }

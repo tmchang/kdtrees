@@ -14,14 +14,10 @@ class Profile(val attributes: Array[Double], val name: String) extends KDData[Pr
   }
   
   override def compDim(dim: Int, other: Profile): Double = {
-    if (dim >= 0 && dim < dimensions) math.abs(attributes(dim)-other.attributes(dim))
+    if (dim >= 0 && dim < dimensions) (attributes(dim)-other.attributes(dim))
     else throw new NoSuchElementException()
   }
   
-  override def lessThan(other: Profile)(dim: Int): Boolean = {
-    if (dim >= 0 && dim < dimensions) (attributes(dim) < other.attributes(dim))
-    else throw new NoSuchElementException()
-  }
   
   override def toString(): String = {
     
@@ -51,9 +47,6 @@ object Profile {
     println(t2.distance(t1) == 5.0)
     println(t1.compDim(0, t2) == 3.0)
     println(t2.compDim(1, t1) == 4.0)
-    println(t2.lessThan(t1)(0))
-    println(t2.lessThan(t1)(1))
-    println(!t1.lessThan(t2)(0))
     val t3 = new Profile(Array(1.0,2.0,-1.0), "")
     val t4 = new Profile(Array(-2.0,2.0,-5.0), "")
     println(t3.distance(t4) == 5.0)
