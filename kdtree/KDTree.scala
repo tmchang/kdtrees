@@ -333,17 +333,11 @@ object KDTree {
     // and KDTree
     
     
-    for (i <- 0 until 20) {
+    for (i <- 0 until 5) {
       val a = Array.fill(10)(Random.nextDouble)
       val f = new Profile(a, "")
       println(brute.findNN(f).get == bigTree.findNN(f).get)
     }
-    val n = new Profile(Array(-1.0,-1.0,-1.0,-1.0,-1.0,-1.0,-1.0,-1.0,-1.0,-1.0), "")
-    println(brute.findNN(n).get)
-    println(bigTree.findNN(n).get)
-    val n2 = new Profile(Array(-.5,-.5,-.5,-.5,-.5,-.5,-.5,-.5,-.5,-.5), "")
-    println(brute.findNN(n2).get)
-    println(bigTree.findNN(n2).get)
     //To show that the tree built from csv is balanced
     println("Size of left branch: ")
     println(bigTree.size(bigTree.root.left))
