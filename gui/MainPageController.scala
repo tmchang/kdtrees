@@ -15,6 +15,7 @@ import kdtrees.kdtree.Profile
 import kdtrees.kdtree.KDTree
 import kdtrees.kdtree.KDTreeNode
 import scala.Double
+import kdtrees.kdtree.BruteForce
 
 class MainPageController {
 
@@ -34,11 +35,15 @@ class MainPageController {
   private var page2 : Scene = null;
   private var page2Controller : ResultPageController = null;
   private var tree : KDTree[Profile] = null
+  private var brute : BruteForce[Profile] = null
   
   def setTree(t: KDTree[Profile]) {
     this.tree = t
   }
 
+  def setBrute(t: BruteForce[Profile]) {
+    this.brute = t
+  }
   
  /**
  * Handles the pressing of the clear button on the main GUI page.
@@ -74,13 +79,13 @@ class MainPageController {
        var root: Parent = loader.load()
        var tempc : ResultPageController = loader.getController()
        this.page2Controller = tempc
-       this.page2 = new Scene(root, 780, 330)
+       this.page2 = new Scene(root, 400, 820)
      }
      page2Controller.display(yourMatch, stage.getScene(), stage)
      stage.close()
      stage.setScene(page2)
-     stage.setMaxWidth(330)
-     stage.setMaxHeight(820)
+     stage.setMinWidth(400)
+     stage.setMinHeight(830)
      stage.show()
 
   }
@@ -132,7 +137,8 @@ class MainPageController {
                                       stringToDouble(attr9Text.getText),
                                       stringToDouble(attr10Text.getText)), 
                                       nameText.getText) 
-     this.tree.findNN(myProfile).get.toString
+     this.tree.findNN(myProfile).get.toString 
+     //+ "\n" + this.brute.findNN(myProfile).get.toString
    }
    catch { 
      case e : NumberFormatException => "Error: Please input a name \n" + 

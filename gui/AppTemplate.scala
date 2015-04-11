@@ -9,10 +9,11 @@ import scala.io.Source
 import kdtrees.kdtree.KDTree
 import kdtrees.kdtree.Profile
 import java.io.FileNotFoundException
+import kdtrees.kdtree.BruteForce
 
 class AppTemplate extends Application {
-  val AppHeight = 820
-  val AppWidth = 330
+  val AppHeight = 830
+  val AppWidth = 400
   
   override def start(stage: Stage) {
     val args: Array[String] = getParameters().getRaw().toArray(new Array[String](0))
@@ -20,12 +21,14 @@ class AppTemplate extends Application {
     try {
     val profiles = Parser.csvToProfiles(csvFile)
     val tree: KDTree[Profile] = new KDTree(profiles)
+    val brute: BruteForce[Profile] = new BruteForce(profiles)
     // Load the FXML
     val loader: FXMLLoader = new FXMLLoader(getClass().getResource("fxml_main.fxml"))
     val root: Parent = loader.load()
     val controller: MainPageController = loader.getController()
     controller.setStage(stage)
     controller.setTree(tree)
+    controller.setBrute(brute)
     
     stage.setTitle("Knight Date")
     stage.setScene(new Scene(root, AppWidth, AppHeight))
