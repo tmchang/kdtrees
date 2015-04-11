@@ -17,7 +17,7 @@ import kdtrees.kdtree.KDTreeNode
 import scala.Double
 
 class MainPageController {
-//  @FXML private var welcomeText: Text = _
+
   @FXML private var nameText : TextField = null;
   @FXML private var attr1Text : TextField = null;
   @FXML private var attr2Text : TextField = null;
@@ -62,7 +62,6 @@ class MainPageController {
  * Handles the pressing of the submit button on the main GUI page.
  **/
   @FXML protected def handleSubmitButtonAction(event : ActionEvent) : Unit = {
-    //try here
     val yourMatch = findMatch()
     
        if (page2 == null) {
@@ -76,13 +75,11 @@ class MainPageController {
      stage.close()
      stage.setScene(page2)
      stage.show()
-     
-     //catch and pop up some red text
   }
   
    /**
- * Handles the pressing of the randomize button on the main GUI page.
- **/
+   * Handles the pressing of the randomize button on the main GUI page.
+   **/
   @FXML protected def handleRandomizeButtonAction(event : ActionEvent) : Unit = {
    val randomGen = new Random()
    val strBuild = new StringBuilder()
@@ -111,6 +108,10 @@ class MainPageController {
     this.stage = stage
   }
   
+  /**
+   * Constructs the profile based on user input and finds the nearest neighbor to the 
+   * constructed profile
+   */
   def findMatch() : String = {
    try { val myProfile = new Profile(Array(stringToDouble(attr1Text.getText),
                                       stringToDouble(attr2Text.getText),
@@ -133,6 +134,9 @@ class MainPageController {
 
   }
   
+  /**
+   * converts a string to a double
+   */
   private def stringToDouble(s: String): Double = {
     val d = s.toDouble
     if (d > 1.0 || d < -1.0) throw new NumberFormatException()
