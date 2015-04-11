@@ -30,6 +30,11 @@ class Profile(val attributes: Array[Double], val name: String) extends KDData[Pr
               "Name: " + name
   }
   
+  /**
+   * returns true if Profile that is equivalent to this Profile
+   * @param that - the other Profile to check
+   * @return - Boolean, true if this is equal to that in name and attributes
+   */
   def equals(that: Profile): Boolean ={
     return (this.attributes.deep == that.attributes.deep) &&
               (this.name == that.name)

@@ -62,9 +62,11 @@ class MainPageController {
  * Handles the pressing of the submit button on the main GUI page.
  **/
   @FXML protected def handleSubmitButtonAction(event : ActionEvent) : Unit = {
-    //try here
-    val yourMatch = findMatch()
-    
+    var yourMatch = findMatch()
+       if (nameText.getText() == "") {
+         yourMatch = "Error: Please input a name \n" + 
+     " and attributes between -1 and 1"
+       }
        if (page2 == null) {
        val loader : FXMLLoader = new FXMLLoader(getClass().getResource("fxml_result.fxml"))
        var root: Parent = loader.load()
@@ -75,9 +77,10 @@ class MainPageController {
      page2Controller.display(yourMatch, stage.getScene(), stage)
      stage.close()
      stage.setScene(page2)
+     stage.setMaxWidth(330)
+     stage.setMaxHeight(820)
      stage.show()
      
-     //catch and pop up some red text
   }
   
    /**
@@ -126,7 +129,8 @@ class MainPageController {
      this.tree.findNN(myProfile).get.toString
    }
    catch { 
-     case e : NumberFormatException => "Attributes should be doubles between -1 and 1"
+     case e : NumberFormatException => "Error: Please input a name \n" + 
+     " and attributes between -1 and 1"
      
    }
 
