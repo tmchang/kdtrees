@@ -56,6 +56,11 @@ object AppTemplate {
  */
 object Parser {
   import kdtrees.kdtree.Profile
+  /**
+   * Parses a csv file and converts the data to a list of Profiles
+   * @param file the csv file containing the profile information
+   * @return will return a list of Profiles created from the csv file.
+   */
   def csvToProfiles(file: String): List[Profile] = {
     val src = Source.fromFile(file)
     val iter = src.getLines().map(_.split(","))
