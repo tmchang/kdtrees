@@ -11,7 +11,7 @@
     xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="5" vgap="10">
 	<padding><Insets top="25" right="25" bottom="10" left="25"/></padding>
   	<columnConstraints>
-    	<ColumnConstraints hgrow="ALWAYS" minWidth="125.0" prefWidth="125.0" maxWidth="800.0"/>
+    	<ColumnConstraints hgrow="ALWAYS" minWidth="125.0" prefWidth="125.0" maxWidth="125.0"/>
   	</columnConstraints>
   	<rowConstraints>
     	<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -31,12 +31,6 @@
 		GridPane.columnIndex="0" GridPane.rowIndex="2">
 	<Button fx:id="back" text="Back" onAction="#handleBackButtonAction"/>
 		</HBox>
-
-    <!-- TODO:
-	1) Create the back button with text "Back"
-	2) Add an 'onAction' property to return to the previous scene
-	   when the button is clicked
-    -->
     
 
     </GridPane>

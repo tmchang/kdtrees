@@ -8,14 +8,16 @@ import javafx.stage.Stage
 import scala.io.Source
 import kdtrees.kdtree.KDTree
 import kdtrees.kdtree.Profile
+import java.io.FileNotFoundException
 
 class AppTemplate extends Application {
-  val AppHeight = 780
+  val AppHeight = 820
   val AppWidth = 330
   
   override def start(stage: Stage) {
     val args: Array[String] = getParameters().getRaw().toArray(new Array[String](0))
     val csvFile = args(0) //Load the .csv file containing profiles
+    try {
     val profiles = Parser.csvToProfiles(csvFile)
     val tree: KDTree[Profile] = new KDTree(profiles)
     // Load the FXML
@@ -24,12 +26,15 @@ class AppTemplate extends Application {
     val controller: MainPageController = loader.getController()
     controller.setStage(stage)
     controller.setTree(tree)
-
+    
     stage.setTitle("Knight Date")
     stage.setScene(new Scene(root, AppWidth, AppHeight))
     stage.setMinWidth(AppWidth);
     stage.setMinHeight(AppHeight);
-    stage.show()  
+    stage.show()
+    } catch {
+      case e: FileNotFoundException => println("Error in csv file path: File Not Found")
+    }
   }
 }
 
@@ -44,6 +49,11 @@ object AppTemplate {
   }
 }
 
+/**
+ * Object Parser has one method csvToProfiles which takes in a filename
+ * of a csv file containing rows of name, Doubles and creates a List
+ * of Profiles
+ */
 object Parser {
   import kdtrees.kdtree.Profile
   /**

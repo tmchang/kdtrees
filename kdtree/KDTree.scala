@@ -12,7 +12,7 @@ class KDTree[A <: KDData[A]](data: List[A]) extends KDSearch[A] {
   
   // The root node of the tree
   private val root: KDTreeNode[A] = new KDTreeNode(findMedian(0, data))
-  
+  private val dimensions = root.datum.dimensions
   // Builds the tree by setting left and right references for all nodes in data
   buildTree(0, root, data)  
  
@@ -63,7 +63,7 @@ class KDTree[A <: KDData[A]](data: List[A]) extends KDSearch[A] {
     if (data.length == 0) {
       None
     } else {
-      val visitedNodes = new Stack[KDTreeNode[A]]()
+      val visitedNodes = new Stack[Option[KDTreeNode[A]]]()
       searchTree(root, target, visitedNodes, 0) // modifies visitedNodes in place
       // return the min distance to target by unwinding the stack
       // Uses 10000000 as an initial distance, and root as an initial "best" node
@@ -82,22 +82,22 @@ class KDTree[A <: KDData[A]](data: List[A]) extends KDSearch[A] {
   private def searchTree(
       parent: KDTreeNode[A], 
       target: A, 
-      visitedNodes: Stack[KDTreeNode[A]], 
+      visitedNodes: Stack[Option[KDTreeNode[A]]], 
       dim: Int) {
     
-    visitedNodes.push(parent) // parent is visited
-    if (lessThan(dim)(target, parent.datum)) {// Search right
+    visitedNodes.push(Some(parent)) // parent is visited
+    if (lessThan(dim)(target, parent.datum)) {// Search left
         parent.left match {
-          case None => // Leaf Node
+          case None => visitedNodes.push(None) //Leaf Node
           case Some(newNode) => searchTree(
               newNode,
               target,
               visitedNodes,
               (dim + 1) % parent.datum.dimensions)
         }
-      } else {
+      } else {// Search right
         parent.right match {
-          case None => // Leaf Node
+          case None => visitedNodes.push(None) // Leaf Node
           case Some(newNode) => searchTree(
               newNode,
               target,
@@ -122,46 +122,46 @@ class KDTree[A <: KDData[A]](data: List[A]) extends KDSearch[A] {
    * @return - Optionally the nearest datum to target
    */
   private def unwindRecursion(
-      visitedNodes: Stack[KDTreeNode[A]], 
+      visitedNodes: Stack[Option[KDTreeNode[A]]], 
       target: A,
       bestDist: Double,
       bestMatch: A,
       baseLevel: Int): Option[A] = {
     
     val toCheck = visitedNodes.pop // The node we are checking for distance
-    val dim = toCheck.datum.dimensions
-    var newBestDist: Option[Double] =  None
-    var newBestMatch: Option[A] = None
-    if (toCheck.datum.distance(target) < bestDist) {
-      newBestDist = Some(toCheck.datum.distance(target))
-      newBestMatch = Some(toCheck.datum)
-    } else {
-      newBestDist = Some(bestDist)
-      newBestMatch = Some(bestMatch)
+    var newBestDist: Option[Double] = Some(bestDist)
+    var newBestMatch: Option[A] = Some(bestMatch)
+    toCheck match {
+      case Some(d) => if (d.datum.distance(target) < bestDist) {
+                         newBestDist = Some(d.datum.distance(target))
+                         newBestMatch = Some(d.datum)
+                      }
+      case None =>  // Leaf so don't update
     }
-    
+
     if (visitedNodes.length == 0) return newBestMatch //End recursion
     if (math.abs(visitedNodes
         .top
+        .get
         .datum
-        .compDim((visitedNodes.length - 1 + baseLevel) % dim, target)) < 
+        .compDim((visitedNodes.length - 1 + baseLevel) % dimensions, target)) <
         newBestDist.get) {// There could be nearer points in other branch
-      val otherNodes: Stack[KDTreeNode[A]] = new Stack[KDTreeNode[A]]()
-      if (visitedNodes.top.left.get eq toCheck) {//Already checked the left
-        visitedNodes.top.right match {
+      val otherNodes = new Stack[Option[KDTreeNode[A]]]()
+      if (visitedNodes.top.get.left eq toCheck) {//Already checked the left
+        visitedNodes.top.get.right match {
           case None => 
           case Some(node) => {
             searchTree(//Builds the other stack
                 node, 
                 target, 
                 otherNodes, 
-                (baseLevel + visitedNodes.length) % dim)
+                (baseLevel + visitedNodes.length) % dimensions)
             newBestMatch = unwindRecursion(//Searches the other stack
                 otherNodes, 
                 target, 
                 newBestDist.get, 
                 newBestMatch.get, 
-                (baseLevel + visitedNodes.length) % dim)
+                (baseLevel + visitedNodes.length) % dimensions)
             newBestDist = Some(newBestMatch.get.distance(target))
             return unwindRecursion(// Continue checking the original stack
                 visitedNodes,
@@ -172,20 +172,20 @@ class KDTree[A <: KDData[A]](data: List[A]) extends KDSearch[A] {
           }
         }
       } else {//already checked the right
-        visitedNodes.top.left match {
+        visitedNodes.top.get.left match {
           case None => 
           case Some(node) => {
             searchTree(//Builds the other stack
                 node, 
                 target, 
                 otherNodes, 
-                (baseLevel + visitedNodes.length) % dim)
+                (baseLevel + visitedNodes.length) % dimensions)
             newBestMatch = unwindRecursion(//Searches the other stack
                 otherNodes, 
                 target, 
                 newBestDist.get, 
                 newBestMatch.get, 
-                (baseLevel + visitedNodes.length) % dim)
+                (baseLevel + visitedNodes.length) % dimensions)
             newBestDist = Some(newBestMatch.get.distance(target))
             return unwindRecursion(// Continue checking the original stack
                 visitedNodes,
@@ -246,7 +246,7 @@ class KDTree[A <: KDData[A]](data: List[A]) extends KDSearch[A] {
     def helper(
         level: Int, 
         node: Option[KDTreeNode[A]]): Array[Option[KDTreeNode[A]]] = {
-      if (level >=2) Array(node)
+      if (level >=3) Array(node)
       else node match {
         case None => Array(None)
         case Some(d) => Array(
@@ -263,7 +263,7 @@ class KDTree[A <: KDData[A]](data: List[A]) extends KDSearch[A] {
     val sb = new StringBuilder()
     for (o <- toArray()) {
       o match {
-        case None => sb.append("Leaf")
+        case None => sb.append("\nLeaf\n")
         case Some(d) => sb.append(d.datum.toString())
       }
     }
@@ -306,16 +306,16 @@ object KDTree {
     val p12 = new Profile(Array(4.0, 7.0, 4.0), "a")
     val p22 = new Profile(Array(3.0,4.0,6.0),"b")
     val p32 = new Profile(Array(5.0,5.0,2.0),"c")
-    val p42 = new Profile(Array(1.0,2.0,9.0),"d")
+    val p42 = new Profile(Array(1.0,2.0,7.0),"d")
     val p52 = new Profile(Array(2.0,8.0,5.0),"e")
     val p62 = new Profile(Array(6.0,1.0,7.0),"f")
     val p72 = new Profile(Array(6.0,9.0,8.0),"g")
-    val l12 = List(p12,p22,p32,p42,p52,p62,p72)
+    val p73 = new Profile(Array(1.0, 5.0, 0.0), "")
+    val l12 = List(p12,p22,p32,p42,p52,p62,p72,p73)
     val test2 = new KDTree[Profile](l12)
     println("Nodes from left to right")
     println(test2.toString())
-    println(test2.findNN(new Profile(Array(3.0, 9.0, 8.0),"test2")))
-    
+    println(test2.findNN(new Profile(Array(3.0, 4.0, 7.0),"test2")))
     //Test loading csv and findNN 
     import kdtrees.gui.Parser
     import scala.util.Random
@@ -323,15 +323,49 @@ object KDTree {
     val bigTree = new KDTree(csvProfiles)
     val brute = new BruteForce(csvProfiles)
     val f1 = new Profile(Array(0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0), "")
+    // Print out the results to see that they are correct
     println(brute.findNN(f1).get)
     println(bigTree.findNN(f1).get)
-    val f2 = new Profile(Array.fill(10)(Random.nextDouble), "")
-    println(brute.findNN(f2).get == bigTree.findNN(f2).get)
+    // Show that these are equal
+    println(brute.findNN(f1).get == bigTree.findNN(f1).get)
+    // 20 random test cases to show equivalence between BruteForce
+    // and KDTree
+    
+    for (i <- 0 until 20) {
+      val a = Array.fill(10)(Random.nextDouble)
+      val f = new Profile(a, "")
+      println(brute.findNN(f).get == bigTree.findNN(f).get)
+    }
+    val n = new Profile(Array(-1.0,-1.0,-1.0,-1.0,-1.0,-1.0,-1.0,-1.0,-1.0,-1.0), "")
+    println(brute.findNN(n).get)
+    println(bigTree.findNN(n).get)
+    val n2 = new Profile(Array(-.5,-.5,-.5,-.5,-.5,-.5,-.5,-.5,-.5,-.5), "")
+    println(brute.findNN(n2).get)
+    println(bigTree.findNN(n2).get)
     //To show that the tree built from csv is balanced
     println("Size of left branch: ")
     println(bigTree.size(bigTree.root.left))
     println("Size of right branch: ")
     println(bigTree.size(bigTree.root.right))
+    
+   val r = new Profile(Array(0.7255377291161322,
+0.22951116383543058,
+0.3421166136292778,
+0.11408504263086772,
+0.10419456714007413,
+0.949594266993293,
+0.33873870469118705,
+0.07724961457107671,
+0.6527770325458975,
+0.5417963449186668), "")
+  println(brute.findNN(r).get)
+  println(bigTree.findNN(r).get)
+  val r1 = brute.findNN(r).get
+  val r2 = bigTree.findNN(r).get
+  println(brute.findNN(r).get == bigTree.findNN(r).get)
+
+    println(r.distance(r1))
+    println(r.distance(r2))
     
     
   }
